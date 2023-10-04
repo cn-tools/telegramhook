@@ -3,7 +3,7 @@
 
 Here is ready to use vue.js project allowing user-friendly set telegram bots webhooks. Taken from Charles Okwuagwu's answer at [Stack Overflow](https://stackoverflow.com/questions/42554548/how-to-set-telegram-bot-webhook) and a bit improved.
 
-![screenshot](https://raw.githubusercontent.com/igronus/telegramhook.tk/master/screenshot.png)
+![screenshot](https://raw.githubusercontent.com/cn-tools/telegramhook/master/screenshot.png)
 
 
 ### Usage
@@ -32,6 +32,8 @@ This should be on the same server from which you wish to run the Telegram Bot.
 6. Submit the form
 ```
 
-### Demo
+### Working Demo
 
 Live demo could be found (and used) at [telegramhook.tk](http://telegramhook.tk). (NB: no https yet on my server, use with caution and be aware of MiTM.)
+
+Instead of original link above (it doesn't work at this time), you could use [cn-tools.github.io/telegramhook](https://cn-tools.github.io/telegramhook)
