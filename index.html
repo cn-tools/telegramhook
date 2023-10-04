@@ -4,7 +4,10 @@
   <title>Set Telegram Webhooks</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.0/css/bulma.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@creativebulma/bulma-tooltip@1.2.0/dist/bulma-tooltip.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-slider@2.0.5/dist/css/bulma-slider.min.css" integrity="sha256-+dlSYn04i4uiZ+E4jWkjJ0z55i51jUWcWgRfOTPp3Io=" crossorigin="anonymous">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.min.js" integrity="sha512-BAMfk70VjqBkBIyo9UTRLl3TBJ3M0c6uyy2VMUrq370bWs7kchLNN9j1WiJQus9JAJVqcriIUX859JOm12LWtw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bulma-slider@2.0.5/dist/js/bulma-slider.min.js" integrity="sha256-22jr4VSiVZeRPFY18xUA/noy5aIF+5qYyWQtDC3kfZ4=" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -18,23 +21,34 @@
         <label class="label">Enter your Host</label>
         <p class="control">
           <input class="radio" type="radio" name="protocol" v-model="protocol" value='https'> https
-          <input class="radio" type="radio" name="protocol" v-model="protocol" value='http'> http
+          <input class="radio" type="radio" name="protocol" v-model="protocol" value='http' disabled> http <span class="has-tooltip-multiline" data-tooltip="HTTPS allowed only"><i class="fa fa-info-circle" aria-hidden="true"></i></span>
           <input class="input" type="text" v-model="host" />
         </p>
-        <label class="label">Enter your Port</label>
+        <label class="label">Enter your Port <span class="has-tooltip-multiline" data-tooltip="Ports currently supported for webhooks: 443, 80, 88, 8443."><i class="fa fa-info-circle" aria-hidden="true"></i></span></label>
         <p class="control">
-          <input class="input" type="text" v-model="port" />
+        <input class="input" type="text" v-model="port" />
         </p>
         <label class="label">Enter URL path</label>
         <p class="control">
           <input class="input" type="text" v-model="path" />
         </p>
+        <p class="control">
+        <label class="label">Add Token to URL</label>
+          <input class="radio" type="radio" name="add_token" v-model="add_token" value=''> No
+          <input class="radio" type="radio" name="add_token" v-model="add_token" value='1'> Yes
+        </p>
 
         <input type="hidden" name="url" v-model="bot_url">
-        <label class="label">Maximum Connections?</label>
+        <label class="label">Maximum Connections? ({{ max_connections }} of 100)</label>
         <p class="control">
-          <input class="input" type="text" name="max_connections" value="100" />
+          <input name="max_connections" class="slider is-fullwidth" step="1" min="1" max="100" type="range" v-model="max_connections">
         </p>
+
+        <label class="label">Secret Token <span class="has-tooltip-multiline" data-tooltip="A secret token to be sent in a header “X-Telegram-Bot-Api-Secret-Token” in every webhook request, 1-256 characters. Only characters A-Z, a-z, 0-9, _ and - are allowed. The header is useful to ensure that the request comes from a webhook set by you."><i class="fa fa-info-circle" aria-hidden="true"></i></span>&nbsp;&nbsp;<a href="https://core.telegram.org/bots/api#setwebhook" target=_blank" rel="nofollow noindex"><span class="has-tooltip-multiline" data-tooltip="External link to Telegram for more details"><i class="fa fa-external-link" aria-hidden="true"></i></span></a></label>
+        <p class="control">
+          <input class="input" type="text" name="secret_token" value=""/>
+        </p>
+
         <br/>
         <p style="color:blue">{{ bot_url }}</p>
         <br/>
@@ -51,6 +65,10 @@
           <p class="control">
             <a :href="get_webhook_info" target="_blank" class="button is-info">Get Webhook Info</a>
           </p>
+          <br/>
+          <p class="control">
+            <a :href="delete_webhook_info" target="_blank" class="button is-danger" onclick="return confirm('Are you sure to delete the Telegram Webhook URL?');">Delete Webhook</a>
+          </p>
         </div>
     </div>
   </div>
@@ -59,10 +77,12 @@
       el: '#app',
       data: {
         token: '12345678:ABCdefgHIjKLmNOPQrstu_vwXYZ12345678',
-        port: 1080,
+        port: '',
         host: 'your-server.com',
         path: 'webhooks/bot',
         protocol: 'https',
+        add_token: '1',
+        max_connections: 75,
       },
       computed: {
         get_webhook_info: function () {
@@ -71,6 +91,9 @@
         set_webhook: function () {
           return 'https://api.telegram.org/bot' + this.token + '/setwebhook'
         },
+        delete_webhook_info: function () {
+          return 'https://api.telegram.org/bot' + this.token + '/deletewebhook';
+        },
         bot_url: function () {
           port_string = '';
           if (this.port) {
@@ -78,10 +101,15 @@
           }
 
           path_string = '/' + this.path;
-          
-          return this.protocol + '://' + this.host 
+
+          token_string = '';
+          if (this.add_token) {
+            token_string = this.token;
+          }
+
+          return this.protocol + '://' + this.host
             + port_string
-            + path_string + this.token
+            + path_string + token_string
         }
       }
     }
