@@ -3,7 +3,7 @@
 <head>
   <title>Set Telegram Webhooks</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.0/css/bulma.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@creativebulma/bulma-tooltip@1.2.0/dist/bulma-tooltip.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma-slider@2.0.5/dist/css/bulma-slider.min.css" integrity="sha256-+dlSYn04i4uiZ+E4jWkjJ0z55i51jUWcWgRfOTPp3Io=" crossorigin="anonymous">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.min.js" integrity="sha512-BAMfk70VjqBkBIyo9UTRLl3TBJ3M0c6uyy2VMUrq370bWs7kchLNN9j1WiJQus9JAJVqcriIUX859JOm12LWtw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -13,6 +13,7 @@
 <body>
   <div class="container">
     <div id="app" class="section">
+      <h1 class="title has-text-right">Telegram Bot Webhook Helper</h1>
       <form :action="set_webhook" method="post" enctype="multipart/form-data" target="_blank">
         <label class="label">Enter your Token</label>
         <p class="control">
