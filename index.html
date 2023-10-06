@@ -13,7 +13,7 @@
 <body>
   <div class="container">
     <div id="app" class="section">
-      <form :action="set_webhook" method="post" enctype="multipart/form-data">
+      <form :action="set_webhook" method="post" enctype="multipart/form-data" target="_blank">
         <label class="label">Enter your Token</label>
         <p class="control">
           <input class="input" type="text" v-model="token" />
@@ -54,22 +54,18 @@
         <br/>
         <label class="label">Enter your Certificate</label>
         <p class="control">
-          <input type="file" name="certificate" id="fileToUpload" />
+          <input type="file" :name="name_certificate" id="fileToUpload" @change="onFileChange" />
         </p>
         <br/>
         <div class="control is-grouped">
-          <p class="control">
             <button class="button is-primary" name="submit">Set Webhook</button>
-          </p>
-          <br/>
-          <p class="control">
             <a :href="get_webhook_info" target="_blank" class="button is-info">Get Webhook Info</a>
-          </p>
-          <br/>
-          <p class="control">
             <a :href="delete_webhook_info" target="_blank" class="button is-danger" onclick="return confirm('Are you sure to delete the Telegram Webhook URL?');">Delete Webhook</a>
-          </p>
         </div>
+        <br />
+        <br />
+        <br />
+        <p>Developed by <a href="https://github.com/cn-tools/telegramhook" target="_blank">https://github.com/cn-tools/telegramhook</a> based on <a href="https://github.com/igronus/telegramhook.tk" target="_blank">https://github.com/igronus/telegramhook.tk</a>
     </div>
   </div>
   <script>
@@ -83,13 +79,23 @@
         protocol: 'https',
         add_token: '1',
         max_connections: 40,
+        name_certificate: 'no_certificate',
+      },
+      methods:{
+        onFileChange(event){
+          if (event.target.files.length == 1) {
+            this.name_certificate = 'certificate';
+          } else {
+            this.name_certificate = 'no_certificate';
+          }
+        }
       },
       computed: {
         get_webhook_info: function () {
-          return 'https://api.telegram.org/bot' + this.token + '/getwebhookinfo'
+          return 'https://api.telegram.org/bot' + this.token + '/getwebhookinfo';
         },
         set_webhook: function () {
-          return 'https://api.telegram.org/bot' + this.token + '/setwebhook'
+          return 'https://api.telegram.org/bot' + this.token + '/setwebhook';
         },
         delete_webhook_info: function () {
           return 'https://api.telegram.org/bot' + this.token + '/deletewebhook';
